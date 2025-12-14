@@ -11,8 +11,11 @@ module.exports = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || "testsecret");
-    req.user = decoded;
-    next();
+    req.user = {
+  userId: decoded.userId,
+  role: decoded.role,
+};
+next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid token" });
   }

@@ -1,10 +1,7 @@
 const request = require("supertest");
 const app = require("../../app");
+const prisma = require("../../config/db");
 
-const prisma = require("../../config/db"); 
-
-
-jest.mock("../../config/db");
 
 
 let adminToken;
