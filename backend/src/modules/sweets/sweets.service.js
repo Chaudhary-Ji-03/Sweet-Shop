@@ -22,3 +22,25 @@ exports.searchSweets = async ({ name, category, minPrice, maxPrice }) => {
     }
   });
 };
+
+exports.purchaseSweet = async (id) => {
+  const sweet = await prisma.sweet.findUnique({ where: { id: Number(id) } });
+  if (!sweet) throw new Error("Sweet not found");
+  if (sweet.quantity <= 0) throw new Error("Out of stock");
+
+  return await prisma.sweet.update({
+    where: { id: Number(id) },
+    data: { quantity: sweet.quantity - 1 }
+  });
+};
+
+exports.restockSweet = async (id, qty) => {
+  if (qty <= 0) throw new Error("Quantity must be positive");
+  const sweet = await prisma.sweet.findUnique({ where: { id: Number(id) } });
+  if (!sweet) throw new Error("Sweet not found");
+
+  return await prisma.sweet.update({
+    where: { id: Number(id) },
+    data: { quantity: sweet.quantity + qty }
+  });
+};

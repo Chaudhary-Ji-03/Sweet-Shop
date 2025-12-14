@@ -13,5 +13,7 @@ router.delete("/:id",
 );
 
 router.get("/search", authMiddleware, sweetController.searchSweets);
+router.post("/:id/purchase", authMiddleware, sweetController.purchaseSweet);
+router.post("/:id/restock", authMiddleware, roleMiddleware("ADMIN"), sweetController.restockSweet);
 
 module.exports = router;
