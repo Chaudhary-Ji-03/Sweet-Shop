@@ -2,8 +2,6 @@ const request = require("supertest");
 const app = require("../../app");
 const prisma = require("../../config/db");
 
-
-
 let adminToken;
 let userToken;
 
@@ -93,5 +91,60 @@ describe("Sweets Search", () => {
 
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBeGreaterThan(0);
+  });
+});
+
+describe("Inventory Module", () => {
+  let sweetId;
+
+  beforeAll(async () => {
+    const res = await request(app)
+      .post("/api/sweets")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({
+        name: "Candy Cane",
+        category: "Candy",
+        price: 20,
+        quantity: 10
+      });
+    sweetId = res.body.id;
+  });
+
+  it("should allow user to purchase a sweet and decrease quantity", async () => {
+    const res = await request(app)
+      .post(`/api/sweets/${sweetId}/purchase`)
+      .set("Authorization", `Bearer ${userToken}`);
+    
+    expect(res.statusCode).toBe(200);
+    expect(res.body.quantity).toBe(9);
+  });
+
+  it("should not allow purchase if quantity is zero", async () => {
+    await prisma.sweet.update({ where: { id: sweetId }, data: { quantity: 0 } });
+    
+    const res = await request(app)
+      .post(`/api/sweets/${sweetId}/purchase`)
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  it("should allow admin to restock a sweet", async () => {
+    const res = await request(app)
+      .post(`/api/sweets/${sweetId}/restock`)
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ quantity: 5 });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.quantity).toBe(5);
+  });
+
+  it("should block non-admin from restocking", async () => {
+    const res = await request(app)
+      .post(`/api/sweets/${sweetId}/restock`)
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ quantity: 5 });
+
+    expect(res.statusCode).toBe(403);
   });
 });
