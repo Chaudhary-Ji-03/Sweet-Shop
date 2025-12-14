@@ -36,4 +36,21 @@ exports.restockSweet = async (req, res) => {
     res.status(err.status || 400).json({ message: err.message });
   }
 };
+exports.updateSweet = async (req, res) => {
+  try {
+    const sweet = await sweetService.updateSweet(req.params.id, req.body);
+    res.status(200).json(sweet);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
+exports.deleteSweet = async (req, res) => {
+  try {
+    const result = await sweetService.deleteSweet(req.params.id);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
 

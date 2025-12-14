@@ -6,14 +6,10 @@ const sweetController = require("./sweets.controller");
 
 router.post("/", authMiddleware, roleMiddleware("ADMIN"), sweetController.createSweet);
 router.get("/", authMiddleware, sweetController.getAllSweets);
-router.delete("/:id",
-  authMiddleware,
-  roleMiddleware("ADMIN"),
-  (req, res) => res.status(204).send()
-);
-
 router.get("/search", authMiddleware, sweetController.searchSweets);
 router.post("/:id/purchase", authMiddleware, sweetController.purchaseSweet);
 router.post("/:id/restock", authMiddleware, roleMiddleware("ADMIN"), sweetController.restockSweet);
+router.put("/:id", authMiddleware, roleMiddleware("ADMIN"), sweetController.updateSweet);
+router.delete("/:id", authMiddleware, roleMiddleware("ADMIN"), sweetController.deleteSweet);
 
 module.exports = router;

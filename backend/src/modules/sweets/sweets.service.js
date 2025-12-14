@@ -44,3 +44,14 @@ exports.restockSweet = async (id, qty) => {
     data: { quantity: sweet.quantity + qty }
   });
 };
+exports.updateSweet = async (id, data) => {
+  return await prisma.sweet.update({
+    where: { id: Number(id) },
+    data
+  });
+};
+
+exports.deleteSweet = async (id) => {
+  await prisma.sweet.delete({ where: { id: Number(id) } });
+  return { message: "Deleted" };
+};
