@@ -148,3 +148,57 @@ describe("Inventory Module", () => {
     expect(res.statusCode).toBe(403);
   });
 });
+
+describe("Sweet Update & Delete", () => {
+  let sweetId;
+
+  beforeAll(async () => {
+    const res = await request(app)
+      .post("/api/sweets")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({
+        name: "Gummy Bear",
+        category: "Candy",
+        price: 15,
+        quantity: 50
+      });
+    sweetId = res.body.id;
+  });
+
+  it("should allow admin to update a sweet", async () => {
+    const res = await request(app)
+      .put(`/api/sweets/${sweetId}`)
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send({ price: 20, quantity: 60 });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.price).toBe(20);
+    expect(res.body.quantity).toBe(60);
+  });
+
+  it("should block non-admin from updating a sweet", async () => {
+    const res = await request(app)
+      .put(`/api/sweets/${sweetId}`)
+      .set("Authorization", `Bearer ${userToken}`)
+      .send({ price: 25 });
+
+    expect(res.statusCode).toBe(403);
+  });
+
+  it("should allow admin to delete a sweet", async () => {
+    const res = await request(app)
+      .delete(`/api/sweets/${sweetId}`)
+      .set("Authorization", `Bearer ${adminToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe("Deleted");
+  });
+
+  it("should block non-admin from deleting a sweet", async () => {
+    const res = await request(app)
+      .delete(`/api/sweets/${sweetId}`)
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(403);
+  });
+});
