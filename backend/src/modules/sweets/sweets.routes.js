@@ -12,4 +12,6 @@ router.delete("/:id",
   (req, res) => res.status(204).send()
 );
 
+router.get("/search", authMiddleware, sweetController.searchSweets);
+
 module.exports = router;

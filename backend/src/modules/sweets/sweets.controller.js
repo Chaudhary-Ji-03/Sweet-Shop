@@ -13,3 +13,8 @@ exports.getAllSweets = async (req, res) => {
   const sweets = await sweetService.getAllSweets();
   res.status(200).json(sweets);
 };
+
+exports.searchSweets = async (req, res) => {
+  const sweets = await sweetService.searchSweets(req.query);
+  res.status(200).json(sweets);
+};
