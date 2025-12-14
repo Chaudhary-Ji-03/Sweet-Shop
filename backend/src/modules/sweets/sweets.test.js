@@ -75,3 +75,23 @@ describe("Sweets Module", () => {
     expect(res.body.length).toBeGreaterThan(0);
   });
 });
+
+describe("Sweets Search", () => {
+  it("should search sweets by name", async () => {
+    const res = await request(app)
+      .get("/api/sweets/search?name=Chocolate")
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBeGreaterThan(0);
+  });
+
+  it("should search sweets by price range", async () => {
+    const res = await request(app)
+      .get("/api/sweets/search?minPrice=10&maxPrice=60")
+      .set("Authorization", `Bearer ${userToken}`);
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toBeGreaterThan(0);
+  });
+});
