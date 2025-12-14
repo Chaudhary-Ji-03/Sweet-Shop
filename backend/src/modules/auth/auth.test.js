@@ -50,6 +50,7 @@ describe("Auth - Login", () => {
       id: 1,
       email: "login@test.com",
       password: await bcrypt.hash("123456", 10),
+      role: "user", // ✅ Add this
     });
 
     const res = await request(app)
@@ -65,6 +66,7 @@ describe("Auth - Login", () => {
       id: 1,
       email: "login@test.com",
       password: await bcrypt.hash("123456", 10),
+      role: "user", // ✅ Add this
     });
 
     const res = await request(app)
@@ -84,3 +86,4 @@ describe("Auth - Login", () => {
     expect(res.statusCode).toBe(401);
   });
 });
+

@@ -16,3 +16,27 @@ exports.registerUser = async ({ email, password }) => {
     }
   });
 };
+
+const jwt = require("jsonwebtoken");
+
+exports.loginUser = async ({ email, password }) => {
+  const user = await prisma.user.findUnique({ where: { email } });
+
+  if (!user) {
+    throw new Error("Invalid credentials");
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw new Error("Invalid credentials");
+  }
+
+  const token = jwt.sign(
+  { userId: user.id, role: user.role }, 
+  process.env.JWT_SECRET || "testsecret", 
+  { expiresIn: "1h" }
+);
+
+
+  return token;
+};
