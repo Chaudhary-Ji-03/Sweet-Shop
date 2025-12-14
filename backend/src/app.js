@@ -5,7 +5,11 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+const authRoutes = require("./modules/auth/auth.routes");
 
+
+
+app.use("/api/auth", authRoutes);
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });
 });
