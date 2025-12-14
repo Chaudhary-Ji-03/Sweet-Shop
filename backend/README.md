@@ -98,24 +98,8 @@ Frontend: React.js, Tailwind CSS, React Router DOM, Axios
 
 Backend: Node.js, Express.js, Prisma ORM, JWT Authentication
 
-Database: SQLite/PostgreSQL/MySQL
-
-Screenshots
-
-1. Landing Page
-
-2. Register Page
-
-3. Login Page
-
-4. Dashboard (User)
-
-5. Dashboard (Admin)
+Database: SQLite/PostgreSQL
 
 Author
 
 Ritik Choudary
-
-GitHub: your-github-link
-
-LinkedIn: your-linkedin-link
